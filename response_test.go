@@ -8,21 +8,21 @@ import (
 )
 
 type Blog struct {
-	ID            int       `jsonapi:"primary,blogs"`
-	ClientID      string    `jsonapi:"client-id"`
+	Id            int       `jsonapi:"primary,blogs"`
+	ClientId      string    `jsonapi:"client-id"`
 	Title         string    `jsonapi:"attr,title"`
 	Posts         []*Post   `jsonapi:"relation,posts"`
 	CurrentPost   *Post     `jsonapi:"relation,current_post"`
-	CurrentPostID int       `jsonapi:"attr,current_post_id"`
+	CurrentPostId int       `jsonapi:"attr,current_post_id"`
 	CreatedAt     time.Time `jsonapi:"attr,created_at"`
 	ViewCount     int       `jsonapi:"attr,view_count"`
 }
 
 type Post struct {
 	Blog
-	ID            int        `jsonapi:"primary,posts"`
-	BlogID        int        `jsonapi:"attr,blog_id"`
-	ClientID      string     `jsonapi:"client-id"`
+	Id            int        `jsonapi:"primary,posts"`
+	BlogId        int        `jsonapi:"attr,blog_id"`
+	ClientId      string     `jsonapi:"client-id"`
 	Title         string     `jsonapi:"attr,title"`
 	Body          string     `jsonapi:"attr,body"`
 	Comments      []*Comment `jsonapi:"relation,comments"`
@@ -30,15 +30,15 @@ type Post struct {
 }
 
 type Comment struct {
-	ID       int    `jsonapi:"primary,comments"`
-	ClientID string `jsonapi:"client-id"`
-	PostID   int    `jsonapi:"attr,post_id"`
+	Id       int    `jsonapi:"primary,comments"`
+	ClientId string `jsonapi:"client-id"`
+	PostId   int    `jsonapi:"attr,post_id"`
 	Body     string `jsonapi:"attr,body"`
 }
 
 func TestHasPrimaryAnnotation(t *testing.T) {
 	testModel := &Blog{
-		ID:        5,
+		Id:        5,
 		Title:     "Title 1",
 		CreatedAt: time.Now(),
 	}
@@ -60,14 +60,14 @@ func TestHasPrimaryAnnotation(t *testing.T) {
 		t.Fatalf("type should have been blogs, got %s", data.Type)
 	}
 
-	if data.ID != "5" {
-		t.Fatalf("ID not transfered")
+	if data.Id != "5" {
+		t.Fatalf("Id not transfered")
 	}
 }
 
 func TestSupportsAttributes(t *testing.T) {
 	testModel := &Blog{
-		ID:        5,
+		Id:        5,
 		Title:     "Title 1",
 		CreatedAt: time.Now(),
 	}
@@ -95,7 +95,7 @@ func TestSupportsAttributes(t *testing.T) {
 
 func TestOmitsZeroTimes(t *testing.T) {
 	testModel := &Blog{
-		ID:        5,
+		Id:        5,
 		Title:     "Title 1",
 		CreatedAt: time.Time{},
 	}
@@ -154,7 +154,7 @@ func TestRelations(t *testing.T) {
 }
 
 func TestNoRelations(t *testing.T) {
-	testModel := &Blog{ID: 1, Title: "Title 1", CreatedAt: time.Now()}
+	testModel := &Blog{Id: 1, Title: "Title 1", CreatedAt: time.Now()}
 
 	out := bytes.NewBuffer(nil)
 	if err := MarshalOnePayload(out, testModel); err != nil {
@@ -174,45 +174,45 @@ func TestNoRelations(t *testing.T) {
 func TestMarshalMany(t *testing.T) {
 	data := []interface{}{
 		&Blog{
-			ID:        5,
+			Id:        5,
 			Title:     "Title 1",
 			CreatedAt: time.Now(),
 			Posts: []*Post{
 				&Post{
-					ID:    1,
+					Id:    1,
 					Title: "Foo",
 					Body:  "Bar",
 				},
 				&Post{
-					ID:    2,
+					Id:    2,
 					Title: "Fuubar",
 					Body:  "Bas",
 				},
 			},
 			CurrentPost: &Post{
-				ID:    1,
+				Id:    1,
 				Title: "Foo",
 				Body:  "Bar",
 			},
 		},
 		&Blog{
-			ID:        6,
+			Id:        6,
 			Title:     "Title 2",
 			CreatedAt: time.Now(),
 			Posts: []*Post{
 				&Post{
-					ID:    3,
+					Id:    3,
 					Title: "Foo",
 					Body:  "Bar",
 				},
 				&Post{
-					ID:    4,
+					Id:    4,
 					Title: "Fuubar",
 					Body:  "Bas",
 				},
 			},
 			CurrentPost: &Post{
-				ID:    4,
+				Id:    4,
 				Title: "Foo",
 				Body:  "Bar",
 			},
@@ -238,65 +238,65 @@ func TestMarshalMany(t *testing.T) {
 
 func testBlog() *Blog {
 	return &Blog{
-		ID:        5,
+		Id:        5,
 		Title:     "Title 1",
 		CreatedAt: time.Now(),
 		Posts: []*Post{
 			&Post{
-				ID:    1,
+				Id:    1,
 				Title: "Foo",
 				Body:  "Bar",
 				Comments: []*Comment{
 					&Comment{
-						ID:   1,
+						Id:   1,
 						Body: "foo",
 					},
 					&Comment{
-						ID:   2,
+						Id:   2,
 						Body: "bar",
 					},
 				},
 				LatestComment: &Comment{
-					ID:   1,
+					Id:   1,
 					Body: "foo",
 				},
 			},
 			&Post{
-				ID:    2,
+				Id:    2,
 				Title: "Fuubar",
 				Body:  "Bas",
 				Comments: []*Comment{
 					&Comment{
-						ID:   1,
+						Id:   1,
 						Body: "foo",
 					},
 					&Comment{
-						ID:   3,
+						Id:   3,
 						Body: "bas",
 					},
 				},
 				LatestComment: &Comment{
-					ID:   1,
+					Id:   1,
 					Body: "foo",
 				},
 			},
 		},
 		CurrentPost: &Post{
-			ID:    1,
+			Id:    1,
 			Title: "Foo",
 			Body:  "Bar",
 			Comments: []*Comment{
 				&Comment{
-					ID:   1,
+					Id:   1,
 					Body: "foo",
 				},
 				&Comment{
-					ID:   2,
+					Id:   2,
 					Body: "bar",
 				},
 			},
 			LatestComment: &Comment{
-				ID:   1,
+				Id:   1,
 				Body: "foo",
 			},
 		},

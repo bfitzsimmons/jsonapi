@@ -19,7 +19,7 @@ var (
 	ErrUnknownFieldNumberType = errors.New("The struct field was not of a known number type")
 )
 
-// UnmarshalPayload converts an io into a struct instance using jsonapi tags on struct fields.
+// Convert an io into a struct instance using jsonapi tags on struct fields.
 // Method supports single request payloads only, at the moment. Bulk creates and updates
 // are not supported yet.
 //
@@ -62,13 +62,14 @@ func UnmarshalPayload(in io.Reader, model interface{}) error {
 	if payload.Included != nil {
 		includedMap := make(map[string]*Node)
 		for _, included := range payload.Included {
-			key := fmt.Sprintf("%s,%s", included.Type, included.ID)
+			key := fmt.Sprintf("%s,%s", included.Type, included.Id)
 			includedMap[key] = included
 		}
 
 		return unmarshalNode(payload.Data, reflect.ValueOf(model), &includedMap)
+	} else {
+		return unmarshalNode(payload.Data, reflect.ValueOf(model), nil)
 	}
-	return unmarshalNode(payload.Data, reflect.ValueOf(model), nil)
 
 }
 
@@ -82,7 +83,7 @@ func UnmarshalManyPayload(in io.Reader, t reflect.Type) ([]interface{}, error) {
 	if payload.Included != nil {
 		includedMap := make(map[string]*Node)
 		for _, included := range payload.Included {
-			key := fmt.Sprintf("%s,%s", included.Type, included.ID)
+			key := fmt.Sprintf("%s,%s", included.Type, included.Id)
 			includedMap[key] = included
 		}
 
@@ -97,20 +98,21 @@ func UnmarshalManyPayload(in io.Reader, t reflect.Type) ([]interface{}, error) {
 		}
 
 		return models, nil
-	}
+	} else {
+		var models []interface{}
 
-	var models []interface{}
-
-	for _, data := range payload.Data {
-		model := reflect.New(t.Elem())
-		err := unmarshalNode(data, model, nil)
-		if err != nil {
-			return nil, err
+		for _, data := range payload.Data {
+			model := reflect.New(t.Elem())
+			err := unmarshalNode(data, model, nil)
+			if err != nil {
+				return nil, err
+			}
+			models = append(models, model.Interface())
 		}
-		models = append(models, model.Interface())
+
+		return models, nil
 	}
 
-	return models, nil
 }
 
 func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) (err error) {
@@ -149,7 +151,7 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 		}
 
 		if annotation == "primary" {
-			if data.ID == "" {
+			if data.Id == "" {
 				continue
 			}
 
@@ -159,9 +161,9 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 			}
 
 			if fieldValue.Kind() == reflect.String {
-				fieldValue.Set(reflect.ValueOf(data.ID))
+				fieldValue.Set(reflect.ValueOf(data.Id))
 			} else if fieldValue.Kind() == reflect.Int {
-				id, err := strconv.Atoi(data.ID)
+				id, err := strconv.Atoi(data.Id)
 				if err != nil {
 					er = err
 					break
@@ -172,11 +174,11 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 				break
 			}
 		} else if annotation == "client-id" {
-			if data.ClientID == "" {
+			if data.ClientId == "" {
 				continue
 			}
 
-			fieldValue.Set(reflect.ValueOf(data.ClientID))
+			fieldValue.Set(reflect.ValueOf(data.ClientId))
 		} else if annotation == "attr" {
 			attributes := data.Attributes
 			if attributes == nil || len(data.Attributes) == 0 {
@@ -369,7 +371,7 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 }
 
 func fullNode(n *Node, included *map[string]*Node) *Node {
-	includedKey := fmt.Sprintf("%s,%s", n.Type, n.ID)
+	includedKey := fmt.Sprintf("%s,%s", n.Type, n.Id)
 
 	if included != nil && (*included)[includedKey] != nil {
 		return (*included)[includedKey]

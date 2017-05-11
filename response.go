@@ -178,15 +178,15 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 		if annotation == "primary" {
 			id := fieldValue.Interface()
 
-			switch nID := id.(type) {
+			switch nId := id.(type) {
 			case string:
-				node.ID = nID
+				node.Id = nId
 			case int:
-				node.ID = strconv.Itoa(nID)
+				node.Id = strconv.Itoa(nId)
 			case int64:
-				node.ID = strconv.FormatInt(nID, 10)
+				node.Id = strconv.FormatInt(nId, 10)
 			case uint64:
-				node.ID = strconv.FormatUint(nID, 10)
+				node.Id = strconv.FormatUint(nId, 10)
 			default:
 				er = ErrBadJSONAPIID
 				break
@@ -196,7 +196,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 		} else if annotation == "client-id" {
 			clientID := fieldValue.String()
 			if clientID != "" {
-				node.ClientID = clientID
+				node.ClientId = clientID
 			}
 		} else if annotation == "attr" {
 			var omitEmpty bool
@@ -307,7 +307,7 @@ func visitModelNode(model interface{}, included *map[string]*Node, sideload bool
 
 func toShallowNode(node *Node) *Node {
 	return &Node{
-		ID:   node.ID,
+		Id:   node.Id,
 		Type: node.Type,
 	}
 }
@@ -336,7 +336,7 @@ func appendIncluded(m *map[string]*Node, nodes ...*Node) {
 	included := *m
 
 	for _, n := range nodes {
-		k := fmt.Sprintf("%s,%s", n.Type, n.ID)
+		k := fmt.Sprintf("%s,%s", n.Type, n.Id)
 
 		if _, hasNode := included[k]; hasNode {
 			continue

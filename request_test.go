@@ -10,7 +10,7 @@ import (
 )
 
 type BadModel struct {
-	ID int `jsonapi:"primary"`
+	Id int `jsonapi:"primary"`
 }
 
 func TestMalformedTag(t *testing.T) {
@@ -32,16 +32,16 @@ func TestUnmarshalInvalidJSON(t *testing.T) {
 	}
 }
 
-func TestUnmarshalSetsID(t *testing.T) {
-	in := samplePayloadWithID()
+func TestUnmarshalSetsId(t *testing.T) {
+	in := samplePayloadWithId()
 	out := new(Blog)
 
 	if err := UnmarshalPayload(in, out); err != nil {
 		t.Fatal(err)
 	}
 
-	if out.ID != 2 {
-		t.Fatalf("Did not set ID on dst interface")
+	if out.Id != 2 {
+		t.Fatalf("Did not set Id on dst interface")
 	}
 }
 
@@ -200,8 +200,8 @@ func TestUnmarshalNestedRelationshipsEmbedded_withClientIDs(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if model.Posts[0].ClientID == "" {
-		t.Fatalf("ClientID not set from request on related record")
+	if model.Posts[0].ClientId == "" {
+		t.Fatalf("ClientId not set from request on related record")
 	}
 }
 
@@ -234,7 +234,7 @@ func samplePayload() io.Reader {
 								"title": "Foo",
 								"body":  "Bar",
 							},
-							ClientID: "1",
+							ClientId: "1",
 						},
 						&Node{
 							Type: "posts",
@@ -242,7 +242,7 @@ func samplePayload() io.Reader {
 								"title": "X",
 								"body":  "Y",
 							},
-							ClientID: "2",
+							ClientId: "2",
 						},
 					},
 				},
@@ -253,7 +253,7 @@ func samplePayload() io.Reader {
 							"title": "Bas",
 							"body":  "Fuubar",
 						},
-						ClientID: "3",
+						ClientId: "3",
 						Relationships: map[string]interface{}{
 							"comments": &RelationshipManyNode{
 								Data: []*Node{
@@ -262,14 +262,14 @@ func samplePayload() io.Reader {
 										Attributes: map[string]interface{}{
 											"body": "Great post!",
 										},
-										ClientID: "4",
+										ClientId: "4",
 									},
 									&Node{
 										Type: "comments",
 										Attributes: map[string]interface{}{
 											"body": "Needs some work!",
 										},
-										ClientID: "5",
+										ClientId: "5",
 									},
 								},
 							},
@@ -287,10 +287,10 @@ func samplePayload() io.Reader {
 	return out
 }
 
-func samplePayloadWithID() io.Reader {
+func samplePayloadWithId() io.Reader {
 	payload := &OnePayload{
 		Data: &Node{
-			ID:   "2",
+			Id:   "2",
 			Type: "blogs",
 			Attributes: map[string]interface{}{
 				"title":      "New blog",
@@ -308,66 +308,66 @@ func samplePayloadWithID() io.Reader {
 
 func testModel() *Blog {
 	return &Blog{
-		ID:        5,
-		ClientID:  "1",
+		Id:        5,
+		ClientId:  "1",
 		Title:     "Title 1",
 		CreatedAt: time.Now(),
 		Posts: []*Post{
 			&Post{
-				ID:    1,
+				Id:    1,
 				Title: "Foo",
 				Body:  "Bar",
 				Comments: []*Comment{
 					&Comment{
-						ID:   1,
+						Id:   1,
 						Body: "foo",
 					},
 					&Comment{
-						ID:   2,
+						Id:   2,
 						Body: "bar",
 					},
 				},
 				LatestComment: &Comment{
-					ID:   1,
+					Id:   1,
 					Body: "foo",
 				},
 			},
 			&Post{
-				ID:    2,
+				Id:    2,
 				Title: "Fuubar",
 				Body:  "Bas",
 				Comments: []*Comment{
 					&Comment{
-						ID:   1,
+						Id:   1,
 						Body: "foo",
 					},
 					&Comment{
-						ID:   3,
+						Id:   3,
 						Body: "bas",
 					},
 				},
 				LatestComment: &Comment{
-					ID:   1,
+					Id:   1,
 					Body: "foo",
 				},
 			},
 		},
 		CurrentPost: &Post{
-			ID:    1,
+			Id:    1,
 			Title: "Foo",
 			Body:  "Bar",
 			Comments: []*Comment{
 				&Comment{
-					ID:   1,
+					Id:   1,
 					Body: "foo",
 				},
 				&Comment{
-					ID:   2,
+					Id:   2,
 					Body: "bar",
 				},
 			},
 			LatestComment: &Comment{
-				ID:   1,
+				Id:   1,
 				Body: "foo",
 			},
 		},
