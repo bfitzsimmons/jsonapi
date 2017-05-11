@@ -317,6 +317,17 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 				continue
 			}
 
+			if fieldValue.Type() == reflect.TypeOf([]map[string]interface{}{}) {
+				values := make([]map[string]interface{}, v.Len())
+				for i := 0; i < v.Len(); i++ {
+					values[i] = v.Index(i).Interface().(map[string]interface{})
+				}
+
+				fieldValue.Set(reflect.ValueOf(values))
+
+				continue
+			}
+
 			if fieldValue.Type() == reflect.TypeOf(new(time.Time)) {
 				if iso8601 {
 					var tm string
