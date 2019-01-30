@@ -393,6 +393,12 @@ func unmarshalAttribute(
 		return
 	}
 
+	// Handle field of type []map[string]interface{}.
+	if fieldValue.Type() == reflect.TypeOf([]map[string]interface{}{}) {
+		value, err = handleMapSlice(attribute)
+		return
+	}
+
 	// Handle field of type time.Time
 	if fieldValue.Type() == reflect.TypeOf(time.Time{}) ||
 		fieldValue.Type() == reflect.TypeOf(new(time.Time)) {
@@ -432,6 +438,16 @@ func unmarshalAttribute(
 	}
 
 	return
+}
+
+func handleMapSlice(attribute interface{}) (reflect.Value, error) {
+	v := reflect.ValueOf(attribute)
+	values := make([]map[string]interface{}, v.Len())
+	for i := 0; i < v.Len(); i++ {
+		values[i] = v.Index(i).Interface().(map[string]interface{})
+	}
+
+	return reflect.ValueOf(values), nil
 }
 
 func handleStringSlice(attribute interface{}) (reflect.Value, error) {
@@ -625,7 +641,6 @@ func handleStructSlice(
 		model := reflect.New(fieldValue.Type().Elem()).Elem()
 
 		value, err := handleStruct(data, model)
-
 		if err != nil {
 			continue
 		}
