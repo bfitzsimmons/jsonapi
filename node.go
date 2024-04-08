@@ -116,6 +116,6 @@ type Metable interface {
 
 // RelationshipMetable is used to include relationship meta in response data
 type RelationshipMetable interface {
-	// JSONRelationshipMeta will be invoked for each relationship with the corresponding relation name (e.g. `comments`)
+	// JSONAPIRelationshipMeta will be invoked for each relationship with the corresponding relation name (e.g. `comments`)
 	JSONAPIRelationshipMeta(relation string) *Meta
 }

@@ -61,7 +61,7 @@ func (h *ExampleHandler) createBlog(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *ExampleHandler) echoBlogs(w http.ResponseWriter, r *http.Request) {
+func (h *ExampleHandler) echoBlogs(w http.ResponseWriter, _ *http.Request) {
 	jsonapiRuntime := jsonapi.NewRuntime().Instrument("blogs.list")
 	// ...fetch your blogs, filter, offset, limit, etc...
 
@@ -98,7 +98,7 @@ func (h *ExampleHandler) showBlog(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *ExampleHandler) listBlogs(w http.ResponseWriter, r *http.Request) {
+func (h *ExampleHandler) listBlogs(w http.ResponseWriter, _ *http.Request) {
 	jsonapiRuntime := jsonapi.NewRuntime().Instrument("blogs.list")
 	// ...fetch your blogs, filter, offset, limit, etc...
 

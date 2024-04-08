@@ -51,17 +51,16 @@ var (
 // Many Example: you could pass it, w, your http.ResponseWriter, and, models, a
 // slice of Blog struct instance pointers to be written to the response body:
 //
-//	 func ListBlogs(w http.ResponseWriter, r *http.Request) {
-//     blogs := []*Blog{}
+//		 func ListBlogs(w http.ResponseWriter, r *http.Request) {
+//	    blogs := []*Blog{}
 //
-//		 w.Header().Set("Content-Type", jsonapi.MediaType)
-//		 w.WriteHeader(http.StatusOK)
+//			 w.Header().Set("Content-Type", jsonapi.MediaType)
+//			 w.WriteHeader(http.StatusOK)
 //
-//		 if err := jsonapi.MarshalPayload(w, blogs); err != nil {
-//			 http.Error(w, err.Error(), http.StatusInternalServerError)
+//			 if err := jsonapi.MarshalPayload(w, blogs); err != nil {
+//				 http.Error(w, err.Error(), http.StatusInternalServerError)
+//			 }
 //		 }
-//	 }
-//
 func MarshalPayload(w io.Writer, models interface{}) error {
 	payload, err := Marshal(models)
 	if err != nil {
@@ -192,8 +191,7 @@ func MarshalOnePayloadEmbedded(w io.Writer, model interface{}) error {
 	return json.NewEncoder(w).Encode(payload)
 }
 
-func visitModelNode(model interface{}, included *map[string]*Node,
-	sideload bool) (*Node, error) {
+func visitModelNode(model interface{}, included *map[string]*Node, sideload bool) (*Node, error) {
 	node := new(Node)
 
 	var er error
@@ -352,7 +350,7 @@ func visitModelNode(model interface{}, included *map[string]*Node,
 		} else if annotation == annotationRelation {
 			var omitEmpty bool
 
-			//add support for 'omitempty' struct tag for marshaling as absent
+			// add support for 'omitempty' struct tag for marshaling as absent
 			if len(args) > 2 {
 				omitEmpty = args[2] == annotationOmitEmpty
 			}
@@ -393,7 +391,7 @@ func visitModelNode(model interface{}, included *map[string]*Node,
 				relationship.Meta = relMeta
 
 				if sideload {
-					shallowNodes := []*Node{}
+					var shallowNodes []*Node
 					for _, n := range relationship.Data {
 						appendIncluded(included, n)
 						shallowNodes = append(shallowNodes, toShallowNode(n))
@@ -476,7 +474,7 @@ func toShallowNode(node *Node) *Node {
 
 func visitModelNodeRelationships(models reflect.Value, included *map[string]*Node,
 	sideload bool) (*RelationshipManyNode, error) {
-	nodes := []*Node{}
+	var nodes []*Node
 
 	for i := 0; i < models.Len(); i++ {
 		n := models.Index(i).Interface()
