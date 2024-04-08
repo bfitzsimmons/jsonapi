@@ -1,3 +1,3 @@
-module github.com/bfitzsimmons/jsonapi
+module github.com/bfitzsimmons/jsonapi/v2
 
 go 1.22

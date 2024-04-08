@@ -69,7 +69,7 @@ func (l *Links) validate() (err error) {
 	//  - a string containing the link’s URL.
 	//  - an object (“link object”) which can contain the following members:
 	//    - href: a string containing the link’s URL.
-	//    - meta: a meta object containing non-standard meta-information about the
+	//    - meta: a metaobject containing non-standard meta-information about the
 	//            link.
 	for k, v := range *l {
 		_, isString := v.(string)

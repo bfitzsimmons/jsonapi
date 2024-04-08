@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/bfitzsimmons/jsonapi"
+	"github.com/bfitzsimmons/jsonapi/v2"
 )
 
 // Blog is a model representing a blog site

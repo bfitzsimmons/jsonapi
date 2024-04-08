@@ -25,7 +25,7 @@ func fixtureBlogCreate(i int) *Blog {
 			},
 			{
 				ID:    2 * i,
-				Title: "Fuubar",
+				Title: "Fubar",
 				Body:  "Bas",
 				Comments: []*Comment{
 					{

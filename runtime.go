@@ -21,11 +21,11 @@ const (
 	// ends.
 	UnmarshalStop
 
-	// MarshalStart is the Event that is sent sent when serialization of a payload
+	// MarshalStart is the Event that is sent when serialization of a payload
 	// begins.
 	MarshalStart
 
-	// MarshalStop is the Event that is sent sent when serialization of a payload
+	// MarshalStop is the Event that is sent when serialization of a payload
 	// ends.
 	MarshalStop
 )
@@ -40,7 +40,7 @@ type Runtime struct {
 // Events is the func type that provides the callback for handling event timings.
 type Events func(*Runtime, Event, string, time.Duration)
 
-// Instrumentation is a a global Events variable.  This is the handler for all
+// Instrumentation is a global Events variable.  This is the handler for all
 // timing events.
 var Instrumentation Events
 

@@ -9,7 +9,7 @@ import (
 	"net/http/httptest"
 	"time"
 
-	"github.com/bfitzsimmons/jsonapi"
+	"github.com/bfitzsimmons/jsonapi/v2"
 )
 
 func main() {

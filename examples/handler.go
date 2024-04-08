@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/bfitzsimmons/jsonapi"
+	"github.com/bfitzsimmons/jsonapi/v2"
 )
 
 const (

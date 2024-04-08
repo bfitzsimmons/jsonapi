@@ -24,8 +24,8 @@ var (
 	// "iso8601" in the tag spec, but the JSON value was not an ISO8601 timestamp string.
 	ErrInvalidISO8601 = errors.New("Only strings can be parsed as dates, ISO8601 timestamps")
 	// ErrUnknownFieldNumberType is returned when the JSON value was a float
-	// (numeric) but the Struct field was a non numeric type (i.e. not int, uint,
-	// float, etc)
+	// (numeric) but the Struct field was a non-numeric type (i.e. not int, uint,
+	// float, etc.)
 	ErrUnknownFieldNumberType = errors.New("The struct field was not of a known number type")
 	// ErrInvalidType is returned when the given type is incompatible with the expected type.
 	ErrInvalidType = errors.New("Invalid type provided") // I wish we used punctuation.
@@ -63,8 +63,8 @@ func newErrUnsupportedPtrType(rf reflect.Value, t reflect.Type, structField refl
 // object graph is complete.  That is, in the "relationships" data there are type and id,
 // keys that correspond to records in the "included" array.
 //
-// For example you could pass it, in, req.Body and, model, a BlogPost
-// struct instance to populate in an http handler,
+// For example, you could pass it, in, req.Body and, model, a BlogPost
+// struct instance to populate in a http handler,
 //
 //	func CreateBlog(w http.ResponseWriter, r *http.Request) {
 //		blog := new(Blog)
@@ -187,7 +187,7 @@ func unmarshalNode(data *Node, model reflect.Value, included *map[string]*Node) 
 				break
 			}
 
-			// ID will have to be transmitted as astring per the JSON API spec
+			// ID will have to be transmitted as a string per the JSON API spec
 			v := reflect.ValueOf(data.ID)
 
 			// Deal with PTRS
