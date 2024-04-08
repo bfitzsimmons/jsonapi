@@ -21,7 +21,7 @@ func TestErrorObjectWritesExpectedErrorMessage(t *testing.T) {
 }
 
 func TestMarshalErrorsWritesTheExpectedPayload(t *testing.T) {
-	var marshalErrorsTableTasts = []struct {
+	var marshalErrorsTableTests = []struct {
 		Title string
 		In    []*ErrorObject
 		Out   map[string]interface{}
@@ -41,7 +41,7 @@ func TestMarshalErrorsWritesTheExpectedPayload(t *testing.T) {
 			}},
 		},
 	}
-	for _, testRow := range marshalErrorsTableTasts {
+	for _, testRow := range marshalErrorsTableTests {
 		t.Run(testRow.Title, func(t *testing.T) {
 			buffer, output := bytes.NewBuffer(nil), map[string]interface{}{}
 			var writer io.Writer = buffer

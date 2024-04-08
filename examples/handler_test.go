@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/bfitzsimmons/jsonapi"
+	"github.com/bfitzsimmons/jsonapi/v2"
 )
 
 func TestExampleHandler_post(t *testing.T) {
@@ -97,7 +97,7 @@ func TestHttpErrorWhenHeaderDoesNotMatch(t *testing.T) {
 	handler.ServeHTTP(rr, r)
 
 	if rr.Code != http.StatusUnsupportedMediaType {
-		t.Fatal("expected Unsupported Media Type staus error")
+		t.Fatal("expected Unsupported Media Type status error")
 	}
 }
 

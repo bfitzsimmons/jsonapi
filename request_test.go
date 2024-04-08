@@ -3,6 +3,7 @@ package jsonapi
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"reflect"
@@ -136,7 +137,8 @@ func TestUnmarshalToStructWithPointerAttr_BadType_bool(t *testing.T) {
 	if err.Error() != expectedErrorMessage {
 		t.Fatalf("Unexpected error message: %s", err.Error())
 	}
-	if _, ok := err.(ErrUnsupportedPtrType); !ok {
+	var errUnsupportedPtrType ErrUnsupportedPtrType
+	if !errors.As(err, &errUnsupportedPtrType) {
 		t.Fatalf("Unexpected error type: %s", reflect.TypeOf(err))
 	}
 }
@@ -156,7 +158,8 @@ func TestUnmarshalToStructWithPointerAttr_BadType_MapPtr(t *testing.T) {
 	if err.Error() != expectedErrorMessage {
 		t.Fatalf("Unexpected error message: %s", err.Error())
 	}
-	if _, ok := err.(ErrUnsupportedPtrType); !ok {
+	var errUnsupportedPtrType ErrUnsupportedPtrType
+	if !errors.As(err, &errUnsupportedPtrType) {
 		t.Fatalf("Unexpected error type: %s", reflect.TypeOf(err))
 	}
 }
@@ -177,14 +180,15 @@ func TestUnmarshalToStructWithPointerAttr_BadType_Struct(t *testing.T) {
 	if err.Error() != expectedErrorMessage {
 		t.Fatalf("Unexpected error message: %s", err.Error())
 	}
-	if _, ok := err.(ErrUnsupportedPtrType); !ok {
+	var errUnsupportedPtrType ErrUnsupportedPtrType
+	if !errors.As(err, &errUnsupportedPtrType) {
 		t.Fatalf("Unexpected error type: %s", reflect.TypeOf(err))
 	}
 }
 
 func TestUnmarshalToStructWithPointerAttr_BadType_IntSlice(t *testing.T) {
 	out := new(WithPointer)
-	type FooStruct struct{ A, B int }
+
 	in := map[string]interface{}{
 		"name": []int{4, 5}, // This is the wrong type.
 	}
@@ -198,7 +202,8 @@ func TestUnmarshalToStructWithPointerAttr_BadType_IntSlice(t *testing.T) {
 	if err.Error() != expectedErrorMessage {
 		t.Fatalf("Unexpected error message: %s", err.Error())
 	}
-	if _, ok := err.(ErrUnsupportedPtrType); !ok {
+	var errUnsupportedPtrType ErrUnsupportedPtrType
+	if !errors.As(err, &errUnsupportedPtrType) {
 		t.Fatalf("Unexpected error type: %s", reflect.TypeOf(err))
 	}
 }
@@ -239,7 +244,7 @@ func TestStringPointerField(t *testing.T) {
 func TestMalformedTag(t *testing.T) {
 	out := new(BadModel)
 	err := UnmarshalPayload(samplePayload(), out)
-	if err == nil || err != ErrBadJSONAPIStructTag {
+	if err == nil || !errors.Is(err, ErrBadJSONAPIStructTag) {
 		t.Fatalf("Did not error out with wrong number of arguments in tag")
 	}
 }
@@ -308,7 +313,7 @@ func TestUnmarshal_nonNumericID(t *testing.T) {
 	in := bytes.NewReader(payload)
 	out := new(Post)
 
-	if err := UnmarshalPayload(in, out); err != ErrBadJSONAPIID {
+	if err := UnmarshalPayload(in, out); !errors.Is(err, ErrBadJSONAPIID) {
 		t.Fatalf(
 			"Was expecting a `%s` error, got `%s`",
 			ErrBadJSONAPIID,
@@ -399,7 +404,7 @@ func TestUnmarshalInvalidISO8601(t *testing.T) {
 
 	out := new(Timestamp)
 
-	if err := UnmarshalPayload(in, out); err != ErrInvalidISO8601 {
+	if err := UnmarshalPayload(in, out); !errors.Is(err, ErrInvalidISO8601) {
 		t.Fatalf("Expected ErrInvalidISO8601, got %v", err)
 	}
 }
@@ -434,7 +439,7 @@ func TestUnmarshalRelationships(t *testing.T) {
 		t.Fatalf("Current post was not materialized")
 	}
 
-	if out.CurrentPost.Title != "Bas" || out.CurrentPost.Body != "Fuubar" {
+	if out.CurrentPost.Title != "Bas" || out.CurrentPost.Body != "Fubar" {
 		t.Fatalf("Attributes were not set")
 	}
 
@@ -849,7 +854,7 @@ func TestUnmarshalCustomTypeAttributes_ErrInvalidType(t *testing.T) {
 		t.Fatal("Expected an error unmarshalling the payload due to type mismatch, got none")
 	}
 
-	if err != ErrInvalidType {
+	if !errors.Is(err, ErrInvalidType) {
 		t.Fatalf("Expected error to be %v, was %v", ErrInvalidType, err)
 	}
 }
@@ -922,7 +927,7 @@ func samplePayload() io.Reader {
 						Type: "posts",
 						Attributes: map[string]interface{}{
 							"title": "Bas",
-							"body":  "Fuubar",
+							"body":  "Fubar",
 						},
 						ClientID: "3",
 						Relationships: map[string]interface{}{
@@ -1033,7 +1038,7 @@ func testModel() *Blog {
 			},
 			{
 				ID:    2,
-				Title: "Fuubar",
+				Title: "Fubar",
 				Body:  "Bas",
 				Comments: []*Comment{
 					{

@@ -17,7 +17,7 @@ Or, see [Alternative Installation](#alternative-installation).
 
 ## Background
 
-You are working in your Go web application and you have a struct that is
+You are working in your Go web application, and you have a struct that is
 organized similarly to your database schema. You need to send and
 receive json payloads that adhere to the JSON API spec. Once you realize that
 your json needed to take on this special form, you go down the path of
@@ -172,7 +172,7 @@ relationship with other structs. JSON API will traverse the graph of
 relationships and marshal or unmarshal records. The first argument must
 be, `relation`, and the second should be the name of the relationship,
 used as the key in the `relationships` hash for the record. The optional
-third argument is `omitempty` - if present will prevent non existent to-one and
+third argument is `omitempty` - if present will prevent non-existent to-one and
 to-many from being serialized.
 
 ## Methods Reference

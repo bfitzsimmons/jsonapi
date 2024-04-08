@@ -2,7 +2,7 @@
 Package jsonapi provides a serializer and deserializer for jsonapi.org spec payloads.
 
 You can keep your model structs as is and use struct field tags to indicate to jsonapi
-how you want your response built or your request deserialzied. What about my relationships?
+how you want your response built or your request deserialized. What about my relationships?
 jsonapi supports relationships out of the box and will even side load them in your response
 into an "included" array--that contains associated objects.
 
@@ -48,13 +48,13 @@ objects that represent this type of model.
 Value, attr: "attr,<key name in attributes hash>[,<extra arguments>]"
 
 These fields' values should end up in the "attribute" hash for a record.  The first
-argument must be, "attr', and the second should be the name for the key to display in
+argument must be, "attr", and the second should be the name for the key to display in
 the "attributes" hash for that record.
 
 The following extra arguments are also supported:
 
 "omitempty": excludes the fields value from the "attribute" hash.
-"iso8601": uses the ISO8601 timestamp format when serialising or deserialising the time.Time value.
+"iso8601": uses the ISO8601 timestamp format when serialising or deserializing the time.Time value.
 
 Value, relation: "relation,<key name in relationships hash>"
 

@@ -3,6 +3,7 @@ package jsonapi
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"reflect"
 	"sort"
 	"testing"
@@ -116,7 +117,7 @@ func TestWithoutOmitsEmptyAnnotationOnRelation(t *testing.T) {
 	}
 	relationships := jsonData["data"].(map[string]interface{})["relationships"].(map[string]interface{})
 
-	// Verifiy the "posts" relation was an empty array
+	// Verify the "posts" relation was an empty array
 	posts, ok := relationships["posts"]
 	if !ok {
 		t.Fatal("Was expecting the data.relationships.posts key/value to have been present")
@@ -137,7 +138,7 @@ func TestWithoutOmitsEmptyAnnotationOnRelation(t *testing.T) {
 		t.Fatal("Was expecting the data.relationships.posts.data value to have been an empty array []")
 	}
 
-	// Verifiy the "current_post" was a null
+	// Verify the "current_post" was a null
 	currentPost, postExists := relationships["current_post"]
 	if !postExists {
 		t.Fatal("Was expecting the data.relationships.current_post key/value to have NOT been omitted")
@@ -342,7 +343,7 @@ func TestMarshall_invalidIDType(t *testing.T) {
 	o := &badIDStruct{ID: &id}
 
 	out := bytes.NewBuffer(nil)
-	if err := MarshalPayload(out, o); err != ErrBadJSONAPIID {
+	if err := MarshalPayload(out, o); !errors.Is(err, ErrBadJSONAPIID) {
 		t.Fatalf(
 			"Was expecting a `%s` error, got `%s`", ErrBadJSONAPIID, err,
 		)
@@ -751,7 +752,7 @@ func TestMarshalPayload_many(t *testing.T) {
 				},
 				{
 					ID:    2,
-					Title: "Fuubar",
+					Title: "Fubar",
 					Body:  "Bas",
 				},
 			},
@@ -773,7 +774,7 @@ func TestMarshalPayload_many(t *testing.T) {
 				},
 				{
 					ID:    4,
-					Title: "Fuubar",
+					Title: "Fubar",
 					Body:  "Bas",
 				},
 			},
@@ -888,15 +889,15 @@ func TestMarshalMany_SliceOfInterfaceAndSliceOfStructsSameJSON(t *testing.T) {
 	}
 }
 
-func TestMarshal_InvalidIntefaceArgument(t *testing.T) {
+func TestMarshal_InvalidInterfaceArgument(t *testing.T) {
 	out := new(bytes.Buffer)
-	if err := MarshalPayload(out, true); err != ErrUnexpectedType {
+	if err := MarshalPayload(out, true); !errors.Is(err, ErrUnexpectedType) {
 		t.Fatal("Was expecting an error")
 	}
-	if err := MarshalPayload(out, 25); err != ErrUnexpectedType {
+	if err := MarshalPayload(out, 25); !errors.Is(err, ErrUnexpectedType) {
 		t.Fatal("Was expecting an error")
 	}
-	if err := MarshalPayload(out, Book{}); err != ErrUnexpectedType {
+	if err := MarshalPayload(out, Book{}); !errors.Is(err, ErrUnexpectedType) {
 		t.Fatal("Was expecting an error")
 	}
 }
@@ -928,7 +929,7 @@ func testBlog() *Blog {
 			},
 			{
 				ID:    2,
-				Title: "Fuubar",
+				Title: "Fubar",
 				Body:  "Bas",
 				Comments: []*Comment{
 					{
