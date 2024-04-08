@@ -86,7 +86,7 @@ func TestMarshal_attrStringSlice(t *testing.T) {
 	}
 
 	// Convert from []interface{} to []string
-	jsonTagsStrings := []string{}
+	var jsonTagsStrings []string
 	for _, tag := range jsonTags {
 		jsonTagsStrings = append(jsonTagsStrings, tag.(string))
 	}
@@ -279,10 +279,10 @@ func TestWithOmitsEmptyAnnotationOnAttribute(t *testing.T) {
 }
 
 func TestMarshalIDPtr(t *testing.T) {
-	id, make, model := "123e4567-e89b-12d3-a456-426655440000", "Ford", "Mustang"
+	id, mak, model := "123e4567-e89b-12d3-a456-426655440000", "Ford", "Mustang"
 	car := &Car{
 		ID:    &id,
-		Make:  &make,
+		Make:  &mak,
 		Model: &model,
 	}
 
@@ -629,7 +629,7 @@ func TestSupportsMetable(t *testing.T) {
 		t.Fatalf("Expected data.meta")
 	}
 
-	meta := Meta(*data.Meta)
+	meta := *data.Meta
 	if e, a := "extra details regarding the blog", meta["detail"]; e != a {
 		t.Fatalf("Was expecting meta.detail to be %q, got %q", e, a)
 	}
@@ -857,7 +857,7 @@ func TestMarshalMany_SliceOfInterfaceAndSliceOfStructsSameJSON(t *testing.T) {
 		{ID: 1, Author: "aren55555", ISBN: "abc"},
 		{ID: 2, Author: "shwoodard", ISBN: "xyz"},
 	}
-	interfaces := []interface{}{}
+	var interfaces []interface{}
 	for _, s := range structs {
 		interfaces = append(interfaces, s)
 	}

@@ -29,7 +29,6 @@ var (
 	ErrUnknownFieldNumberType = errors.New("The struct field was not of a known number type")
 	// ErrInvalidType is returned when the given type is incompatible with the expected type.
 	ErrInvalidType = errors.New("Invalid type provided") // I wish we used punctuation.
-
 )
 
 // ErrUnsupportedPtrType is returned when the Struct field was a pointer but
@@ -67,24 +66,23 @@ func newErrUnsupportedPtrType(rf reflect.Value, t reflect.Type, structField refl
 // For example you could pass it, in, req.Body and, model, a BlogPost
 // struct instance to populate in an http handler,
 //
-//   func CreateBlog(w http.ResponseWriter, r *http.Request) {
-//   	blog := new(Blog)
+//	func CreateBlog(w http.ResponseWriter, r *http.Request) {
+//		blog := new(Blog)
 //
-//   	if err := jsonapi.UnmarshalPayload(r.Body, blog); err != nil {
-//   		http.Error(w, err.Error(), 500)
-//   		return
-//   	}
+//		if err := jsonapi.UnmarshalPayload(r.Body, blog); err != nil {
+//			http.Error(w, err.Error(), 500)
+//			return
+//		}
 //
-//   	// ...do stuff with your blog...
+//		// ...do stuff with your blog...
 //
-//   	w.Header().Set("Content-Type", jsonapi.MediaType)
-//   	w.WriteHeader(201)
+//		w.Header().Set("Content-Type", jsonapi.MediaType)
+//		w.WriteHeader(201)
 //
-//   	if err := jsonapi.MarshalPayload(w, blog); err != nil {
-//   		http.Error(w, err.Error(), 500)
-//   	}
-//   }
-//
+//		if err := jsonapi.MarshalPayload(w, blog); err != nil {
+//			http.Error(w, err.Error(), 500)
+//		}
+//	}
 //
 // Visit https://github.com/google/jsonapi#create for more info.
 //
@@ -117,8 +115,8 @@ func UnmarshalManyPayload(in io.Reader, t reflect.Type) ([]interface{}, error) {
 		return nil, err
 	}
 
-	models := []interface{}{}         // will be populated from the "data"
-	includedMap := map[string]*Node{} // will be populate from the "included"
+	var models []interface{}          // will be populated from the "data"
+	includedMap := map[string]*Node{} // will be populated from the "included"
 
 	if payload.Included != nil {
 		for _, included := range payload.Included {
@@ -427,7 +425,7 @@ func unmarshalAttribute(
 
 	// Field was a Pointer type
 	if fieldValue.Kind() == reflect.Ptr {
-		value, err = handlePointer(attribute, args, fieldType, fieldValue, structField)
+		value, err = handlePointer(attribute, fieldType, fieldValue, structField)
 		return
 	}
 
@@ -567,12 +565,7 @@ func handleNumeric(
 	return numericValue, nil
 }
 
-func handlePointer(
-	attribute interface{},
-	args []string,
-	fieldType reflect.Type,
-	fieldValue reflect.Value,
-	structField reflect.StructField) (reflect.Value, error) {
+func handlePointer(attribute interface{}, fieldType reflect.Type, fieldValue reflect.Value, structField reflect.StructField) (reflect.Value, error) {
 	t := fieldValue.Type()
 	var concreteVal reflect.Value
 
